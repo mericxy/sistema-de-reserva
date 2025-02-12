@@ -1,0 +1,11 @@
+{% extends 'meuapp/base.html' %}
+{%  load static %}
+{% block content %}
+<body>
+    <div class="container">
+        <h2>Seu cadastro está em análise</h2>
+        <p>Você receberá um e-mail quando for aprovado.</p>
+        <a href="{% url 'index' %}" class="btn">Voltar para a página inicial</a>
+    </div>
+</body>
+{% endblock %}

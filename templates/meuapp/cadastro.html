@@ -1,0 +1,22 @@
+{% extends 'meuapp/base.html' %}
+{%  load static %}
+{% block content %}
+<body>
+    <div class="container">
+        <h2>Cadastro</h2>
+        <form action="{% url 'cadastro' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="siape" placeholder="SIAPE" required>
+            <input type="text" name="cpf" placeholder="CPF" required>
+            <input type="text" name="nome" placeholder="Nome" required>
+            <input type="email" name="email" placeholder="E-mail" required>
+            <input type="text" name="telefone" placeholder="Telefone" required>
+            <input type="password" name="senha" placeholder="Senha" required>
+            <button type="submit">Cadastrar</button>
+        </form>
+        <p>Ao se cadastrar, seus dados serão analisados.</p>
+        <a href="{% url 'index' %}" class="btn">Home</a>
+        <a href="{% url 'login' %}" class="btn">Voltar</a>
+    </div>
+</body>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'meuapp/base.html' %}
+{%  load static %}
+{% block content %}
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="E-mail" required>
+            <input type="password" name="senha" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+            <a href="{% url 'cadastro' %}" class="btn">Cadastrar</a>
+        </form>
+        <a href="#" class="link">Esqueci minha senha</a>
+    </div>
+</body>
+{% endblock %}

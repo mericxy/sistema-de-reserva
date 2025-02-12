@@ -1,0 +1,12 @@
+{% extends 'meuapp/base.html' %}
+{%  load static %}
+
+{% block content %}
+<body>
+    <div class="container">
+        <h2>Sistema de Reserva</h2>
+        <a href="{% url 'login' %}" class="btn">Entrar</a>
+        <a href="{% url 'cadastro' %}" class="btn">Cadastrar</a>
+    </div>
+</body>
+{% endblock %}
