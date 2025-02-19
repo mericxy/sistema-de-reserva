@@ -8,10 +8,11 @@
             {% csrf_token %}
             <input type="text" name="siape" placeholder="SIAPE" required>
             <input type="text" name="cpf" placeholder="CPF" required>
-            <input type="text" name="nome" placeholder="Nome" required>
+            <input type="text" name="first_name" placeholder="Nome" required>
+            <input type="text" name="last_name" placeholder="Sobrenome" required>
             <input type="email" name="email" placeholder="E-mail" required>
             <input type="text" name="telefone" placeholder="Telefone" required>
-            <input type="password" name="senha" placeholder="Senha" required>
+            <input type="password" name="password" placeholder="Senha" required> <!-- Corrigido -->
             <button type="submit">Cadastrar</button>
         </form>
         <p>Ao se cadastrar, seus dados serão analisados.</p>

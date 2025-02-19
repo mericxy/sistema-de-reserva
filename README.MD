@@ -21,4 +21,5 @@ Atualize o pip
 ### Garanta que está na pasta principal "sistema-de-reserva-main"
 
 Instale as dependências
-pip install -r requirements.txt
+
+    pip install -r requirements.txt
