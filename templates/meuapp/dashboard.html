@@ -2,6 +2,9 @@
 {% load static %}
 {% block content %}
 <body>
+    {% if user.is_superuser %}
+    <a href="#" class="btn btn-admin">Área do Administrador</a>
+    {% endif %}
     <h1>teste</h1>
 </body>
 {% endblock %}

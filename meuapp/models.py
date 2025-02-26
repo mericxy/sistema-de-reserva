@@ -42,7 +42,7 @@ class Servidor(AbstractUser):
     siape = models.CharField(max_length=20, unique=True)
     cpf = models.CharField(max_length=14, unique=True)
     telefone = models.CharField(max_length=20, blank=True, null=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pendente')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='aprovado')
 
     username = None  # Não será utilizado o campo username
     email = models.EmailField(unique=True)
@@ -59,7 +59,9 @@ class Servidor(AbstractUser):
         """
         if not self.pk:  # Só valida se for um novo cadastro
             if not ServidorPreCadastrado.objects.filter(siape=self.siape, cpf=self.cpf).exists():
-                raise ValidationError("SIAPE e CPF não encontrados no sistema. Cadastro não permitido.")
+                self.status = 'pendente'    # Se não existir, o status é pendente
+            else:
+                self.status = 'aprovado'    # Se existir, o status é aprovado
 
     @property
     def is_active(self):
