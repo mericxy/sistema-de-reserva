@@ -6,5 +6,8 @@
         <a href="{% url 'index' %}">Início</a>
         <a href="{% url 'login' %}">Login</a>
         <a href="{% url 'cadastro' %}">Cadastro</a>
+        {% if user.is_superuser %}
+        <a href="#">Área do Administrador</a>
+        {% endif %}
     </nav>
 </header>
