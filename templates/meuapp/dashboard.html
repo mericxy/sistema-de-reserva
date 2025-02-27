@@ -1,9 +1,4 @@
 {% extends 'meuapp/base.html' %}
 {% load static %}
 {% block content %}
-<body>
-    {% if user.is_superuser %}
-    <a href="#" class="btn btn-admin">Área do Administrador</a>
-    {% endif %}
-</body>
 {% endblock %}
