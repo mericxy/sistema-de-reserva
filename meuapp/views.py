@@ -3,6 +3,7 @@ from django.contrib import messages
 from .models import Servidor, ServidorPreCadastrado
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from .forms import ReservaForm
 
 def index(request):
     return render(request, 'meuapp/index.html')
@@ -43,7 +44,15 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'meuapp/dashboard.html')
+    if request.method == "POST":
+        form = ReservaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = ReservaForm()
+
+    return render(request, 'meuapp/dashboard.html', {'form': form})
 
 def cadastro(request):
     if request.method == 'POST':
@@ -87,3 +96,6 @@ def cadastro(request):
 
 def aguardo_aprovacao(request):
     return render(request, 'meuapp/aguardo_aprovacao.html')
+
+def minhas_reservas(request): 
+    return render(request, 'meuapp/minhas_reservas.html')

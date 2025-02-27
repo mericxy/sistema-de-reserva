@@ -126,3 +126,113 @@ button,
 .btn-admin {
   background: #28a745;
 }
+
+/* ============================================================ */
+
+/* Container principal */
+.reserva-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Título do formulário */
+.reserva-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+/* Grupos de campos do formulário */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Labels dos campos */
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+/* Campos de entrada */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+/* Texto de ajuda */
+.form-text {
+  display: block;
+  font-size: 12px;
+  color: #777;
+  margin-top: 5px;
+}
+
+/* Botão de reservar */
+.btn-reservar {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-reservar:hover {
+  background-color: #0056b3;
+}
+
+/* Botão "Ir para minhas reservas" */
+.btn-minhas-reservas {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-minhas-reservas:hover {
+  background-color: #218838;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .reserva-container {
+    padding: 15px;
+  }
+
+  .reserva-title {
+    font-size: 20px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 14px;
+  }
+
+  .btn-reservar,
+  .btn-minhas-reservas {
+    font-size: 14px;
+  }
+}
