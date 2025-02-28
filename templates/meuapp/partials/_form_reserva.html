@@ -1,48 +1,50 @@
 {% load static %}
-
-<div class="reserva-container">
-  <h2 class="reserva-title">Fazer uma Reserva</h2>
-  <form method="post" class="reserva-form">
-    {% csrf_token %}
+<body>
+  
+  <div class="reserva-container">
+    <h2 class="reserva-title">Fazer uma Reserva</h2>
+    <form method="post" class="reserva-form">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="id_ambiente_tipo" class="form-label">Tipo de Ambiente:</label>
+        {{ form.ambiente_tipo }}
+        <small class="form-text">Escolha entre Sala, Laboratório ou Auditório.</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="id_ambiente_numero" class="form-label">Número do Ambiente:</label>
+        {{ form.ambiente_numero }}
+        <small class="form-text">Digite o número do ambiente desejado.</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="id_data" class="form-label">Data:</label>
+        {{ form.data }}
+        <small class="form-text">Selecione uma data válida.</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="id_hora_inicio" class="form-label">Hora de Início:</label>
+        {{ form.hora_inicio }}
+        <small class="form-text">O horário deve estar entre 8:00 e 22:00 e começar em um horário cheio ou múltiplo de 30 minutos.</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="id_hora_fim" class="form-label">Hora de Término:</label>
+        {{ form.hora_fim }}
+        <small class="form-text">A duração deve ser entre 1 e 4 horas.</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="id_descricao" class="form-label">Descrição:</label>
+        {{ form.descricao }}
+        <small class="form-text">Informe detalhes adicionais sobre a reserva.</small>
+    </div>
     
-    <div class="form-group">
-      <label for="id_ambiente_tipo" class="form-label">Tipo de Ambiente:</label>
-      {{ form.ambiente_tipo }}
-      <small class="form-text">Escolha entre Sala, Laboratório ou Auditório.</small>
-    </div>
-
-    <div class="form-group">
-      <label for="id_ambiente_numero" class="form-label">Número do Ambiente:</label>
-      {{ form.ambiente_numero }}
-      <small class="form-text">Digite o número do ambiente desejado.</small>
-    </div>
-
-    <div class="form-group">
-      <label for="id_data" class="form-label">Data:</label>
-      {{ form.data }}
-      <small class="form-text">Selecione uma data válida.</small>
-    </div>
-
-    <div class="form-group">
-      <label for="id_hora_inicio" class="form-label">Hora de Início:</label>
-      {{ form.hora_inicio }}
-      <small class="form-text">O horário deve estar entre 8:00 e 22:00 e começar em um horário cheio ou múltiplo de 30 minutos.</small>
-    </div>
-
-    <div class="form-group">
-      <label for="id_hora_fim" class="form-label">Hora de Término:</label>
-      {{ form.hora_fim }}
-      <small class="form-text">A duração deve ser entre 1 e 4 horas.</small>
-    </div>
-
-    <div class="form-group">
-      <label for="id_descricao" class="form-label">Descrição:</label>
-      {{ form.descricao }}
-      <small class="form-text">Informe detalhes adicionais sobre a reserva.</small>
-    </div>
-
     <button type="submit" class="btn-reservar">Reservar</button>
   </form>
-
+  
   <a href="{% url 'minhas_reservas' %}" class="btn-minhas-reservas">Ir para minhas reservas</a>
 </div>
+</body>
