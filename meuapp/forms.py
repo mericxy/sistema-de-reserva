@@ -13,12 +13,13 @@ class ReservaForm(forms.ModelForm):
             'descricao': forms.Textarea(attrs={'rows': 3}),
         }
 
-    def clean(self):
-        cleaned_data = super().clean()
-        hora_inicio = cleaned_data.get("hora_inicio")
-        hora_fim = cleaned_data.get("hora_fim")
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
 
-        if hora_inicio and hora_fim:
-            if hora_inicio.minute % 30 != 0 or hora_fim.minute % 30 != 0:
-                raise forms.ValidationError("As reservas devem começar e terminar a cada 30 minutos (ex: 8:00, 8:30).")
-        return cleaned_data
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.servidor = self.user  # Define o servidor antes de salvar
+        if commit:
+            instance.save()
+        return instance

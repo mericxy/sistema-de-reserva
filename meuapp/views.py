@@ -45,12 +45,12 @@ def logout_view(request):
 @login_required
 def dashboard(request):
     if request.method == "POST":
-        form = ReservaForm(request.POST)
+        form = ReservaForm(request.POST, user=request.user) # Passa o servidor para o formulário
         if form.is_valid():
-            form.save()
+            form.save()  # Salva a reserva com o servidor definido
             return redirect('dashboard')
     else:
-        form = ReservaForm()
+        form = ReservaForm(user=request.user)  # Passa o servidor para o formulário
 
     return render(request, 'meuapp/dashboard.html', {'form': form})
 

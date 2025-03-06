@@ -1,7 +1,9 @@
 from django.db import models
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth import get_user_model
 from datetime import time, datetime, timedelta
 
 # Classe para gerenciar a criação de usuários
@@ -85,7 +87,7 @@ class Reserva(models.Model):
         ('reprovada', 'Reprovada'),
     ]
 
-    servidor = models.ForeignKey(Servidor, on_delete=models.CASCADE, related_name='reservas')
+    servidor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reservas')
     ambiente_tipo = models.CharField(max_length=20, choices=AMBIENTE_CHOICES)
     ambiente_numero = models.PositiveIntegerField()
     data = models.DateField()
@@ -98,30 +100,9 @@ class Reserva(models.Model):
         return f"Reserva de {self.servidor} em {self.ambiente_tipo} {self.ambiente_numero} ({self.data} {self.hora_inicio}-{self.hora_fim})"
 
     def clean(self):
-        # Validações personalizadas
-        self.validar_limite_reservas()
-        self.validar_horario()
+        if not self.servidor_id:
+            raise ValidationError("O servidor é obrigatório.")
         self.validar_colisao()
-
-    def validar_limite_reservas(self):
-        # Verifica se o servidor já tem 4 reservas
-        if self.servidor.reservas.count() >= 4:
-            raise ValidationError("Um servidor pode ter no máximo 4 reservas.")
-
-    def validar_horario(self):
-        # Verifica se o horário está entre 8:00 e 22:00
-        if self.hora_inicio < time(8, 0) or self.hora_fim > time(22, 0):
-            raise ValidationError("As reservas só podem ser feitas das 8:00 até as 22:00.")
-
-        # Verifica se a duração da reserva é de 1 a 4 horas
-        duracao = datetime.combine(self.data, self.hora_fim) - datetime.combine(self.data, self.hora_inicio)
-        if duracao < timedelta(hours=1) or duracao > timedelta(hours=4):
-            raise ValidationError("A reserva deve ter entre 1 e 4 horas de duração.")
-
-        # Verifica se o horário aumenta de hora em hora
-        duracao_minutos = (self.hora_fim.hour * 60 + self.hora_fim.minute) - (self.hora_inicio.hour * 60 + self.hora_inicio.minute)
-        if duracao_minutos % 30 != 0:
-            raise ValidationError("A duração da reserva deve ser múltipla de 30 minutos.")
 
     def validar_colisao(self):
         # Verifica se há colisão com outras reservas no mesmo ambiente, dia e horário
