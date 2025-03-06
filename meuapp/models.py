@@ -1,7 +1,10 @@
 from django.db import models
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth import get_user_model
+from datetime import time, datetime, timedelta
 
 # Classe para gerenciar a criação de usuários
 class ServidorManager(BaseUserManager):
@@ -70,3 +73,54 @@ class Servidor(AbstractUser):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.siape})"
+
+class Reserva(models.Model):
+    AMBIENTE_CHOICES = [
+        ('sala', 'Sala'),
+        ('laboratorio', 'Laboratório'),
+        ('auditorio', 'Auditório'),
+    ]
+
+    STATUS_RESERVA_CHOICES = [
+        ('aprovada', 'Aprovada'),
+        ('pendente', 'Pendente'),
+        ('reprovada', 'Reprovada'),
+    ]
+
+    servidor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reservas')
+    ambiente_tipo = models.CharField(max_length=20, choices=AMBIENTE_CHOICES)
+    ambiente_numero = models.PositiveIntegerField()
+    data = models.DateField()
+    hora_inicio = models.TimeField()
+    hora_fim = models.TimeField()
+    status = models.CharField(max_length=10, choices=STATUS_RESERVA_CHOICES, default='pendente')
+    descricao = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Reserva de {self.servidor} em {self.ambiente_tipo} {self.ambiente_numero} ({self.data} {self.hora_inicio}-{self.hora_fim})"
+
+    def clean(self):
+        if not self.servidor_id:
+            raise ValidationError("O servidor é obrigatório.")
+        self.validar_colisao()
+
+    def validar_colisao(self):
+        # Verifica se há colisão com outras reservas no mesmo ambiente, dia e horário
+        if Reserva.objects.filter(
+            ambiente_tipo=self.ambiente_tipo,
+            ambiente_numero=self.ambiente_numero,
+            data=self.data,
+            status__in=['aprovada', 'pendente'],
+            hora_inicio__lt=self.hora_fim,
+            hora_fim__gt=self.hora_inicio
+        ).exclude(id=self.id).exists():
+            raise ValidationError("Já existe uma reserva para esse horário.")
+
+
+
+    def save(self, *args, **kwargs):
+        # Atualiza o status para 'reprovada' se a reserva estiver pendente e a data/horário já passaram
+        agora = datetime.now()
+        if self.status == 'pendente' and datetime.combine(self.data, self.hora_fim) < agora:
+            self.status = 'reprovada'
+        super().save(*args, **kwargs)
