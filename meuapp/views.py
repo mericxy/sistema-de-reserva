@@ -4,6 +4,7 @@ from .models import Servidor, ServidorPreCadastrado
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import ReservaForm
+from django.http import HttpResponse
 
 def index(request):
     return render(request, 'meuapp/index.html')
@@ -44,13 +45,29 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    if request.method == "POST":
-        form = ReservaForm(request.POST, user=request.user) # Passa o servidor para o formulário
+    usuario = request.user  # Obtém o usuário logado
+
+    if hasattr(usuario, "_wrapped"):  # Caso seja um SimpleLazyObject
+        usuario = usuario._wrapped
+
+    if not hasattr(usuario, "id") or not isinstance(usuario, Servidor):  # Verifica se o usuário é um Servidor
+        print("Usuário não é um Servidor. Tipo real:", type(usuario))
+        return HttpResponse("Erro: usuário inválido", status=400)
+
+    if request.method == 'POST':
+        form = ReservaForm(request.POST, user=usuario)  # Passa o servidor
+
+        print("Dados recebidos no formulário:", request.POST)  
+
         if form.is_valid():
-            form.save()  # Salva a reserva com o servidor definido
+            print("Formulário válido. Salvando...")
+            reserva = form.save()  # Salva com o servidor definido
+            print("Reserva salva com sucesso:", reserva)
             return redirect('dashboard')
+        else:
+            print("Erro no formulário:", form.errors)  
     else:
-        form = ReservaForm(user=request.user)  # Passa o servidor para o formulário
+        form = ReservaForm(user=usuario)  
 
     return render(request, 'meuapp/dashboard.html', {'form': form})
 

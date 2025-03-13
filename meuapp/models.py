@@ -87,13 +87,20 @@ class Reserva(models.Model):
         ('reprovada', 'Reprovada'),
     ]
 
-    servidor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reservas')
-    ambiente_tipo = models.CharField(max_length=20, choices=AMBIENTE_CHOICES)
+    servidor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE)
+    ambiente_tipo = models.CharField(
+        max_length=20, 
+        choices=AMBIENTE_CHOICES)
     ambiente_numero = models.PositiveIntegerField()
     data = models.DateField()
     hora_inicio = models.TimeField()
     hora_fim = models.TimeField()
-    status = models.CharField(max_length=10, choices=STATUS_RESERVA_CHOICES, default='pendente')
+    status = models.CharField(
+        max_length=10, 
+        choices=STATUS_RESERVA_CHOICES, 
+        default='pendente')
     descricao = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -120,6 +127,13 @@ class Reserva(models.Model):
 
     def save(self, *args, **kwargs):
         # Atualiza o status para 'reprovada' se a reserva estiver pendente e a data/horário já passaram
+
+        if isinstance(self.data, str):
+            self.data = datetime.strptime(self.data, '%Y-%m-%d').date()
+
+        if isinstance(self.hora_fim, str):
+            self.hora_fim = datetime.strptime(self.hora_fim, '%H:%M').time()
+
         agora = datetime.now()
         if self.status == 'pendente' and datetime.combine(self.data, self.hora_fim) < agora:
             self.status = 'reprovada'

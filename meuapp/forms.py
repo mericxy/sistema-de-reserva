@@ -15,11 +15,19 @@ class ReservaForm(forms.ModelForm):
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user = user
+        self.user = user  # Armazena o usuário para usar depois
+        if user:
+            self.instance.servidor = user  # Define o servidor diretamente
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not self.user:
+            raise forms.ValidationError("O servidor é obrigatório.")
+        return cleaned_data
 
     def save(self, commit=True):
         instance = super().save(commit=False)
-        instance.servidor = self.user  # Define o servidor antes de salvar
+        instance.servidor = self.user  # Garante que o servidor seja salvo corretamente
         if commit:
             instance.save()
         return instance
