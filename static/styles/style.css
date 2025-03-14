@@ -71,6 +71,11 @@ button,
   font-weight: bold;
 }
 
+.logo a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .nav a {
   color: white;
   text-decoration: none;

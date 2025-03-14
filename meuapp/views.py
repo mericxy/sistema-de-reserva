@@ -63,9 +63,11 @@ def dashboard(request):
             print("Formulário válido. Salvando...")
             reserva = form.save()  # Salva com o servidor definido
             print("Reserva salva com sucesso:", reserva)
+            messages.success(request, "Reserva realizadacom sucesso!")
             return redirect('dashboard')
         else:
-            print("Erro no formulário:", form.errors)  
+            print("Erro no formulário:", form.errors)
+            messages.error(request, "Erro ao realizar a reserva. Verifique os campos.")  
     else:
         form = ReservaForm(user=usuario)  
 
